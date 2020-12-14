@@ -1,6 +1,7 @@
-# Simple windows c++ tcp server/client
+# Simple windows c++ tcp server/client 
 
 Working without any external includes
+!!! Probably has some memory leaks.
 
 # net.cpp
 
@@ -9,6 +10,7 @@ Edited recv and send functions
 # server.cpp
 
 Server file, should be in server application
+For each client instance its using new thread
 
 # client.cpp 
 
