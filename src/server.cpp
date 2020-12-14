@@ -1,22 +1,23 @@
 #include <iostream>
 #include <WS2tcpip.h>
+#include "../include/net.hpp"
 #include <string>
 #include <thread>
 #include "../include/server.hpp"
+
 #pragma comment (lib, "ws2_32.lib")
+
 int g_port = 1337;
 void clientThread(SOCKET client)
 {
-	std::string welcomemsg = "ServerSynced";
-	send(client, welcomemsg.c_str(), welcomemsg.size() + 1, 0);
+	net::Send("ServerSynced", client, true);
 	while (true)
 	{
-		char buf[4096];
-		ZeroMemory(buf, 4096);
-		int bytesReceived = recv(client, buf, 4096, 0);
-		if (bytesReceived > 0)
+		std::string buffer;
+		bool res = net::Get(buffer, client);
+		if (res)
 		{
-			std::cout << client << ":" << std::string(buf) << std::endl;
+			std::cout << client << ":" << buffer << std::endl;
 		}
 		else
 		{

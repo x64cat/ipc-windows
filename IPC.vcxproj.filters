@@ -20,6 +20,9 @@
     <ClCompile Include="src\server.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\net.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\main.hpp">
@@ -29,6 +32,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\client.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net.hpp">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

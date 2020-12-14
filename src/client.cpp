@@ -1,10 +1,12 @@
 #include <iostream>
-#include <string>
 #include <WS2tcpip.h>
+#include "../include/net.hpp"
+#include <string>
 #include "../include/server.hpp"
 #include "../include/client.hpp"
 
 #pragma comment (lib, "ws2_32.lib")
+
 void startClient()
 {
     std::cout << "Starting client..." << std::endl;
@@ -37,16 +39,14 @@ void startClient()
         WSACleanup();
         return;
     }
-    std::string userInput = "CONNECTEDCLIENT";
-    send(sock, userInput.c_str(), userInput.size() + 1, 0);
+    net::Send("CONNECTEDCLIENT", sock, true);
     while (true)
     {
-        char buf[4096];
-        ZeroMemory(buf, 4096);
-        int byteReceived = recv(sock, buf, 4096, 0);
-        if (byteReceived > 0) 
+        std::string buffer;
+        bool res = net::Get(buffer, sock);
+        if (res)
         {
-            std::cout << std::string(buf) << std::endl;
+            std::cout << buffer << std::endl;
         }
         else
         {
