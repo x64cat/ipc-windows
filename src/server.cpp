@@ -4,10 +4,10 @@
 #include <thread>
 #include "../include/server.hpp"
 #pragma comment (lib, "ws2_32.lib")
-
+int g_port = 1337;
 void clientThread(SOCKET client)
 {
-	std::string welcomemsg = "ReadyServer";
+	std::string welcomemsg = "ServerSynced";
 	send(client, welcomemsg.c_str(), welcomemsg.size() + 1, 0);
 	while (true)
 	{
@@ -34,31 +34,29 @@ void startServer()
 	WORD ver = MAKEWORD(2, 2);
 
 	int wsok = WSAStartup(ver, &wsData);
-	// creating winsocket
+
 	if (wsok != 0) {
-		// Can't init win sock
-		return;
+		exit(1);
 	}
 	// creating socket
 	SOCKET listening = socket(AF_INET, SOCK_STREAM, 0);
 	if (listening == INVALID_SOCKET)
 	{
-		// Can't create socket
-		return;
+		exit(1);
 	}
 
-	// Bind ip and port to socket
+
 
 	sockaddr_in hint;
 	hint.sin_family = AF_INET;
-	std::string str = "1321";
-	hint.sin_port = htons(atoi(str.c_str()));
+	hint.sin_port = htons(g_port);
 	hint.sin_addr.S_un.S_addr = INADDR_ANY; //inet_pton
 
 	bind(listening, (sockaddr*)&hint, sizeof(hint));
-	// tell winsock the sock is for listening
 
-	listen(listening, SOMAXCONN);
+
+	if (listen(listening, SOMAXCONN) != 0)
+		exit(1);
 	std::cout << "Started listening." << std::endl;
 	while (true)
 	{
