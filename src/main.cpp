@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <string>
 #include <iostream>
+#include "../include/net.hpp"
 #include "../include/server.hpp"
 #include "../include/client.hpp"
 
@@ -12,7 +13,23 @@ wchar_t* cs2wc(const char* charArray)
 	MultiByteToWideChar(CP_ACP, 0, charArray, -1, wString, 4096);
 	return wString;
 }
+std::string input(const char* msg)
+{
+	std::cout << msg;
+	std::string str;
+	getline(std::cin, str);
+	if (!str.empty());
+	return str;
+}
 
+void loopCmd(SOCKET& server)
+{
+	while (true)
+	{
+		//бесконечнный цикл, повторяет получение параметров из консоли
+		net::Send(input("Command to server: "), server, true);
+	}
+}
 
 int main(int argc, char* argv[])
 {
@@ -42,6 +59,12 @@ int main(int argc, char* argv[])
 			si.cb = sizeof(si);
 			if (!CreateProcess(szAppPath, cs2wc("Client"), NULL, NULL, FALSE, *czCreationFlags, NULL, NULL, &si, &pi))
 				return 2;
+		}
+		else if (pressedKey == 'c' && !connects.empty())
+		{
+			std::string in = input("What should we pass to our clients? ");
+			for(int i = 0; i < connects.size(); i++)
+				net::Send(in, connects[i], true);
 		}
 	}
 	return 1;

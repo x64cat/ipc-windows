@@ -1,28 +1,13 @@
 #include <iostream>
 #include <WS2tcpip.h>
-#include "../include/net.hpp"
 #include <string>
+#include "../include/net.hpp"
+#include "../include/main.hpp"
 #include "../include/server.hpp"
 #include "../include/client.hpp"
 
 #pragma comment (lib, "ws2_32.lib")
-std::string input(const char* msg)
-{
-    std::cout << msg;
-    std::string str;
-    getline(std::cin, str);
-    if (!str.empty());
-    return str;
-}
 
-void loopCmd(SOCKET &server)
-{
-    while (true)
-    {
-        //бесконечнный цикл, повторяет получение параметров из консоли
-        net::Send(input("Command to server: "), server, true);
-    }
-}
 void startClient()
 {
     std::cout << "Starting client..." << std::endl;
