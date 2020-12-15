@@ -1,4 +1,4 @@
-# Simple windows c++ icp server/client 
+# Simple windows c++ ipc server/client 
 
 Working without any external includes.
 
