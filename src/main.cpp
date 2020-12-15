@@ -29,7 +29,8 @@ int main(int argc, char* argv[])
 	server.detach();
 	while (true)
 	{
-		if (_getch() == '1')
+		char pressedKey = _getch();
+		if (pressedKey == '1')
 		{
 
 			wchar_t szAppPath[MAX_PATH];

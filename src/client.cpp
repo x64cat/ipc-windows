@@ -6,7 +6,23 @@
 #include "../include/client.hpp"
 
 #pragma comment (lib, "ws2_32.lib")
+std::string input(const char* msg)
+{
+    std::cout << msg;
+    std::string str;
+    getline(std::cin, str);
+    if (!str.empty());
+    return str;
+}
 
+void loopCmd(SOCKET &server)
+{
+    while (true)
+    {
+        //бесконечнный цикл, повторяет получение параметров из консоли
+        net::Send(input("Command to server: "), server, true);
+    }
+}
 void startClient()
 {
     std::cout << "Starting client..." << std::endl;
@@ -40,6 +56,8 @@ void startClient()
         return;
     }
     net::Send("CONNECTEDCLIENT", sock, true);
+    // создаем новый поток для получения комманд для отправки, рассинхрон
+    CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)loopCmd, &sock, 0, NULL);
     while (true)
     {
         std::string buffer;
