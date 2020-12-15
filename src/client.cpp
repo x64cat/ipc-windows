@@ -10,7 +10,7 @@
 void startClient()
 {
     std::cout << "Starting client..." << std::endl;
-    std::string ipAddress = "127.0.0.1";
+    std::string ipAddress = "127.0.0.1"; //using localhost
 
     WSAData data;
     WORD ver = MAKEWORD(2, 2);

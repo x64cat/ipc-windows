@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <WS2tcpip.h>
 #include "../include/net.hpp"
 #include <string>
@@ -8,7 +9,10 @@
 #pragma comment (lib, "ws2_32.lib")
 
 int g_port = 1337;
-void clientThread(SOCKET client)
+
+std::vector <SOCKET> connects;
+
+void clientThread(SOCKET &client)
 {
 	net::Send("ServerSynced", client, true);
 	while (true)
@@ -22,6 +26,11 @@ void clientThread(SOCKET client)
 		else
 		{
 			std::cout << "Lost connection from " << client << std::endl;
+			for (int i = 0; i < connects.size(); i++)
+			{
+				if (connects[i] == client)
+					connects.erase(connects.begin() + i);
+			}
 			closesocket(client);
 			return;
 		}
@@ -61,9 +70,18 @@ void startServer()
 	std::cout << "Started listening." << std::endl;
 	while (true)
 	{
-		SOCKET client = accept(listening, nullptr, nullptr);
-		std::thread newClient(clientThread, client);
-		newClient.detach();
+		SOCKET connect = accept(listening, nullptr, nullptr);
+		connects.push_back(connect);
+		int pos = 0;
+		for (int i = 0; i < connects.size(); i++)
+		{
+			if (connects[i] == connect)
+				pos = i;
+		}
+		CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)&clientThread, &connects[pos], 0, NULL);
+
+		//std::thread newClient(clientThread, &connects.end());
+		//newClient.detach();
 	}
 	closesocket(listening);
 	WSACleanup();

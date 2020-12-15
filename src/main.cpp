@@ -21,8 +21,7 @@ int main(int argc, char* argv[])
 	{
 		if (std::string(argv[i]) == "Client")
 		{
-			std::thread client(startClient);
-			client.join();
+			startClient();
 			return 0;
 		}
 	}
